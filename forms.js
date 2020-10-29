@@ -1,73 +1,65 @@
-const init = function() {
+const init = function(){
     document.getElementById('button-cancel').addEventListener('click', reset);
-    document.getElementById('button-send').addEventListener('click', send);
+    document.getElementById('button-cancel').addEventListener('click', send);
 };
 
-const reset = function(ev) {
-    // HTML will automically put the form back to the initial state
-    // unless we do that
-    ev.preventDefault();
-    // we can reset programmatically
+const reset = function(ev){
+    //HTML will automatically put the form to the initial state
+    //unless we do that
+    ev.preventDefault(); //doesnt allow anywhere else to be clicked
+    //we can reset programmatically
     document.getElementById('form-user').reset();
-
-    // if you want to do anything else, you can .....
+    //if you want to do anyhting else for reset, you can do that here.
+    // console.log('the page should reset here');
 };
 
-const validate = function() {
-    // let valid = true;
-    let failures = [];
+const validate = function(){ //validate info and send back error message if info is wrong
+    let valid = false;
+    let failures = {};
 
     const first = document.getElementById('input-first');
-    const email = document.getElementById('input-email');
-    const password = document.getElementById('input-password');
-    const select = document.getElementById('input-age'); // .selectedIndex .options .length .selectedValue .value
-    const chk = document.getElementById('input-alive'); // .checked .value
-
-    // logic for first (element)
-    if (first.value === '') { // empty string ('') is a falsy value
-        failures.push({ input: 'input-first', msg: 'Required field'});
+    const email = document.getElementById("input-email");
+    const password = document.getElementById("input-password");
+    const select = document.getElementById("input-age");
+    const chk = document.getElementById("input-alive");
+    //logic for first (element)
+    if (first.value ==='') {
+        failures.push({input: 'input-first', msg: 'Required Field'}); 
     }
-     // logic for email (element)
-    if (email.value === '' || !email.value.includes('@')) { 
-        failures.push({ input: 'input-email', msg: 'Required field'});
+    if (email.value ==='' || !email.value.includes('@')) {
+        failures.push({input: 'input-first', msg: 'Required Field'}); 
     }
-    // logic for password (element)
-    if (password.value === '' || password.value.length < 8) {
-        failures.push({ input: 'input-password', msg: 'Must be at least 8 characters'});
+    if (password.value === ''|| password.value.length < 8 ) {
+        failures.push({input: 'input-first', msg: 'Must be at least 8 charachters'});
     }
-
-    // logic for select (element)
     if (select.selectedIndex === 0) {
-        failures.push({ input: 'input-age', msg: 'Too young...'});
+        failures.push({input: 'input-age', msg: 'Too Young?'}); 
     }
-
-    // logic for chk (element)
-    if (!chk.checked) {
-        failures.push({ input: 'input-alive', msg: 'Must be alive to submit form'});
-    }
-
-    return failures;
-
+    if (!chk. checked) {
+        failures.push({input: 'input-alive', msg: 'Must be alive to submit form'})
+     }  
+        return failures;
+    
 };
 
 const send = function(ev) {
     ev.preventDefault();
-    ev.stopPropagation(); // bubbling up to any parent element (the click)
+    ev.stopPropagation();
 
     let fails = validate();
 
-    if (fails.length === 0) {
-        // good to go
-        document.getElementById('form-user').submit();
-    } else {
-        // bad user
-        fails.forEach(obj => {
+    if (fails.length === 0 ) {
+        document.getElementById('form-user').submit(); 
+    }else{ //bad user
+        fails.forEach(Obj => {
             const field = document.getElementById(obj.input);
             field.parentElement.classList.add('error');
-            field.parentElement.setAttribute('data-errormsg', obj.msg);
-        })
+            field.parentElement.setAttribute('data-errormsg', obj.msg)    
+        });
     }
 
 };
 
 document.addEventListener('DOMContentLoaded', init);
+
+// function init(){}
